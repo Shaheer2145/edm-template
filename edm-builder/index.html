@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDM Drag & Drop Email Builder Suite</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts: Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header Toolbar -->
+    <header class="app-header">
+      <div class="header-logo">
+        <div class="logo-icon">📧</div>
+        <div class="logo-text">
+          <h1>EDM Builder Studio</h1>
+          <span>Pixel-Perfect Email Designer & QA Suite</span>
+        </div>
+      </div>
+      
+      <!-- Device Toggles -->
+      <div class="device-toggles">
+        <button class="device-btn active" data-device="desktop" title="Desktop Preview (660px)">
+          <i data-lucide="monitor"></i>
+          <span>Desktop</span>
+        </button>
+        <button class="device-btn" data-device="tablet" title="Tablet Preview (768px)">
+          <i data-lucide="tablet"></i>
+          <span>Tablet</span>
+        </button>
+        <button class="device-btn" data-device="mobile" title="Mobile Preview (480px)">
+          <i data-lucide="smartphone"></i>
+          <span>Mobile</span>
+        </button>
+      </div>
+
+      <!-- Main Actions & Studio Tools -->
+      <div class="header-actions">
+        <button id="btn-import" class="btn btn-secondary" title="Upload HTML Template, PDF or Design Image">
+          <i data-lucide="upload-cloud"></i>
+          <span>Import Design</span>
+        </button>
+        <button id="btn-qa-studio" class="btn btn-secondary" title="QA & Outlook Testing Wizard">
+          <i data-lucide="shield-check"></i>
+          <span>QA Studio & Health</span>
+          <span id="badge-health" class="health-badge status-good">100%</span>
+        </button>
+        <button id="btn-presets" class="btn btn-secondary">
+          <i data-lucide="layout"></i>
+          <span>Presets</span>
+        </button>
+        <button id="btn-clear" class="btn btn-danger-text">
+          <i data-lucide="trash-2"></i>
+          <span>Clear</span>
+        </button>
+        <button id="btn-export" class="btn btn-primary">
+          <i data-lucide="code"></i>
+          <span>Export HTML</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-workspace">
+      <!-- Left Sidebar: Elements Panel -->
+      <aside class="sidebar-left">
+        <div class="panel-header">
+          <h2>Elements</h2>
+          <p>Drag elements onto the canvas</p>
+        </div>
+        
+        <div class="elements-scroll">
+          <!-- Layout Grid Section -->
+          <div class="element-group">
+            <h3>Layout Sections</h3>
+            <div class="elements-grid">
+              <div class="drag-item" draggable="true" data-type="section" data-columns="1">
+                <div class="drag-item-icon"><i data-lucide="square"></i></div>
+                <span>1 Column</span>
+              </div>
+              <div class="drag-item" draggable="true" data-type="section" data-columns="2">
+                <div class="drag-item-icon" style="display:flex;gap:2px;"><i data-lucide="columns-2"></i></div>
+                <span>2 Columns</span>
+              </div>
+              <div class="drag-item" draggable="true" data-type="section" data-columns="3">
+                <div class="drag-item-icon" style="display:flex;gap:2px;"><i data-lucide="columns-3"></i></div>
+                <span>3 Columns</span>
+              </div>
+              <div class="drag-item" draggable="true" data-type="section" data-columns="4">
+                <div class="drag-item-icon" style="display:flex;gap:2px;"><i data-lucide="columns-4"></i></div>
+                <span>4 Columns</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Content Blocks Section -->
+          <div class="element-group">
+            <h3>Content Blocks</h3>
+            <div class="elements-grid">
+              <div class="drag-item" draggable="true" data-type="element" data-element-type="text">
+                <div class="drag-item-icon"><i data-lucide="align-left"></i></div>
+                <span>Text Block</span>
+              </div>
+              <div class="drag-item" draggable="true" data-type="element" data-element-type="image">
+                <div class="drag-item-icon"><i data-lucide="image"></i></div>
+                <span>Image</span>
+              </div>
+              <div class="drag-item" draggable="true" data-type="element" data-element-type="button">
+                <div class="drag-item-icon"><i data-lucide="mouse-pointer-click"></i></div>
+                <span>Button</span>
+              </div>
+              <div class="drag-item" draggable="true" data-type="element" data-element-type="divider">
+                <div class="drag-item-icon"><i data-lucide="minus"></i></div>
+                <span>Divider</span>
+              </div>
+              <div class="drag-item" draggable="true" data-type="element" data-element-type="spacer">
+                <div class="drag-item-icon"><i data-lucide="arrow-up-down"></i></div>
+                <span>Spacer</span>
+              </div>
+              <div class="drag-item" draggable="true" data-type="element" data-element-type="social">
+                <div class="drag-item-icon"><i data-lucide="share-2"></i></div>
+                <span>Social Links</span>
+              </div>
+              <div class="drag-item" draggable="true" data-type="element" data-element-type="membership">
+                <div class="drag-item-icon"><i data-lucide="credit-card"></i></div>
+                <span>Membership Info</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Central Editor Workspace -->
+      <section class="editor-canvas-wrapper">
+        <!-- Floating Reference Design Banner (If reference uploaded) -->
+        <div id="reference-banner" class="reference-banner hidden">
+          <div class="ref-banner-info">
+            <i data-lucide="image"></i>
+            <span>Reference Design Loaded</span>
+          </div>
+          <div class="ref-banner-actions">
+            <button id="btn-open-qa-from-banner" class="btn btn-xs btn-secondary"><i data-lucide="split-screen"></i> QA Studio</button>
+            <button id="btn-remove-ref" class="btn btn-xs btn-danger-text"><i data-lucide="x"></i> Clear Ref</button>
+          </div>
+        </div>
+
+        <div id="canvas-container" class="canvas-container desktop-view">
+          <div id="canvas-root" class="canvas-root">
+            
+            <div class="canvas-empty-state">
+              <i data-lucide="plus-circle" class="empty-icon"></i>
+              <h3>Your Email Canvas is Empty</h3>
+              <p>Drag a layout section here to get started</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Sidebar: Properties Inspector -->
+      <aside class="sidebar-right">
+        <div class="panel-header">
+          <h2>Properties</h2>
+          <p id="inspector-subtitle">Select an element to customize</p>
+        </div>
+
+        <div id="inspector-tabs" class="inspector-tabs hidden">
+          <button class="tab-btn active" data-tab="content">Content</button>
+          <button class="tab-btn" data-tab="style">Style</button>
+        </div>
+
+        <div class="inspector-scroll">
+          <div id="inspector-empty" class="inspector-empty">
+            <i data-lucide="sliders"></i>
+            <p>Click on any layout section or content block in the canvas to edit its properties.</p>
+          </div>
+
+          <div id="inspector-form" class="inspector-form hidden">
+            <!-- Dynamic Properties controls will be injected here by app.js -->
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Modal: Import Design & Template -->
+    <div id="modal-import" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2>Import Design or HTML Template</h2>
+          <button class="modal-close"><i data-lucide="x"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="upload-dropzone" id="upload-dropzone">
+            <i data-lucide="file-up" class="dropzone-icon"></i>
+            <h3>Drag & Drop your design file here</h3>
+            <p>Supports HTML templates (.html), PDF designs (.pdf), and Mockup Images (.png, .jpg, .webp)</p>
+            <input type="file" id="file-input" accept=".html,.htm,.pdf,.png,.jpg,.jpeg,.webp" class="hidden">
+            <button id="btn-browse-file" class="btn btn-primary" style="margin-top:12px;">Browse File</button>
+          </div>
+
+          <div class="import-options" style="margin-top:20px;">
+            <h4>Import Options:</h4>
+            <ul style="font-size:12px; color:var(--text-muted); line-height:1.6; padding-left:18px;">
+              <li><strong>HTML Files:</strong> Auto-parses table sections, images, text, buttons, and styles directly into editable builder blocks.</li>
+              <li><strong>PDF / Image Files:</strong> Loads high-resolution mockup image into the QA Studio for side-by-side tracing & pixel comparison.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: 3-Step Guided QA & Outlook Testing Studio -->
+    <div id="modal-qa-studio" class="modal-overlay hidden">
+      <div class="modal-card qa-card">
+        <div class="modal-header">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <h2>QA & Outlook Testing Studio</h2>
+            <span id="validator-score-badge" class="health-score-pill">Outlook Health: 100%</span>
+          </div>
+          <button class="modal-close"><i data-lucide="x"></i></button>
+        </div>
+
+        <!-- 3-Step Guided Wizard Navigation -->
+        <div class="qa-wizard-steps">
+          <button class="qa-step-btn active" data-step="step-ref" onclick="QAStudio.goToStep('step-ref')">
+            <span class="step-num">1</span>
+            <span class="step-label">Reference Mockup</span>
+          </button>
+          <button class="qa-step-btn" data-step="step-compare" onclick="QAStudio.goToStep('step-compare')">
+            <span class="step-num">2</span>
+            <span class="step-label">Visual Comparison</span>
+          </button>
+          <button class="qa-step-btn" data-step="step-health" onclick="QAStudio.goToStep('step-health')">
+            <span class="step-num">3</span>
+            <span class="step-label">Outlook Health Check</span>
+          </button>
+        </div>
+
+        <div class="modal-body qa-body">
+          <!-- STEP 1: Reference Design Upload / View -->
+          <div id="panel-step-ref" class="qa-step-panel">
+            <div class="ref-step-wrapper">
+              <div class="ref-upload-card">
+                <i data-lucide="image" class="ref-card-icon"></i>
+                <h3>Select Target Reference Design</h3>
+                <p>Upload your client design mockup (PNG, JPG, PDF) to compare against your builder template.</p>
+                <input type="file" id="qa-ref-file-input" accept=".png,.jpg,.jpeg,.webp,.pdf,.html" class="hidden">
+                <button id="btn-qa-upload-ref" class="btn btn-primary" style="margin-top:12px;">
+                  <i data-lucide="upload"></i> Upload Reference Image / PDF
+                </button>
+              </div>
+
+              <div class="ref-preview-card">
+                <h4>Active Reference Preview:</h4>
+                <div class="ref-img-frame">
+                  <img id="qa-reference-img" src="https://via.placeholder.com/660x900?text=Click+Upload+Reference+to+Select+Image+or+PDF" alt="Reference Design">
+                </div>
+              </div>
+            </div>
+            
+            <div class="wizard-footer">
+              <button class="btn btn-primary" onclick="QAStudio.goToStep('step-compare')">
+                <span>Next: Visual Comparison</span> <i data-lucide="arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 2: Visual Comparison (Side-by-Side & Overlay) -->
+          <div id="panel-step-compare" class="qa-step-panel hidden">
+            <div class="qa-split-container">
+              <div class="qa-pane" id="qa-left-pane">
+                <div class="pane-title"><i data-lucide="file-image"></i> Original Reference Design</div>
+                <div class="pane-content">
+                  <img id="qa-reference-img-split" src="https://via.placeholder.com/660x900?text=Reference+Mockup" alt="Reference Design">
+                </div>
+              </div>
+              <div class="qa-pane" id="qa-right-pane">
+                <div class="pane-title"><i data-lucide="code"></i> Live Builder Template</div>
+                <div class="pane-content">
+                  <iframe id="qa-preview-frame" class="qa-iframe"></iframe>
+                </div>
+              </div>
+            </div>
+
+            <!-- Opacity Overlay Tool -->
+            <div class="overlay-toolbar" style="border-top:1px solid var(--border-color);">
+              <div class="slider-group" style="width:280px;">
+                <label style="font-size:12px; color:var(--text-muted);">Overlay Opacity:</label>
+                <input type="range" min="0" max="1" step="0.05" value="0.5" id="qa-opacity-slider" oninput="QAStudio.setOpacity(this.value)">
+                <span id="qa-opacity-val" class="slider-value">50%</span>
+              </div>
+              <label class="checkbox-label" style="font-size:12px; margin-left:20px; cursor:pointer;">
+                <input type="checkbox" id="qa-diff-mode" onchange="QAStudio.toggleDiffMode(this.checked)">
+                <span>Color Difference Mode</span>
+              </label>
+            </div>
+
+            <div class="wizard-footer">
+              <button class="btn btn-secondary" onclick="QAStudio.goToStep('step-ref')"><i data-lucide="arrow-left"></i> Back</button>
+              <button class="btn btn-primary" onclick="QAStudio.goToStep('step-health')">
+                <span>Next: Outlook Health Check</span> <i data-lucide="arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 3: Outlook Health Check & Auto-Fix -->
+          <div id="panel-step-health" class="qa-step-panel hidden">
+            <div class="health-step-wrapper">
+              <div class="health-summary-banner">
+                <div class="health-score-big" id="health-big-score">100%</div>
+                <div class="health-summary-text">
+                  <h3 id="health-summary-title">Outlook Compatibility Verified</h3>
+                  <p id="health-summary-desc">Your code is 100% table-based and safe for Outlook desktop copying and sending.</p>
+                  <button id="btn-autofix-all" class="btn btn-primary" style="margin-top:10px;">⚡ Auto-Fix All Issues Now</button>
+                </div>
+              </div>
+
+              <div class="auditor-results-list" id="auditor-results-list">
+                <!-- Audit results populated dynamically -->
+              </div>
+            </div>
+
+            <div class="wizard-footer">
+              <button class="btn btn-secondary" onclick="QAStudio.goToStep('step-compare')"><i data-lucide="arrow-left"></i> Back</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Presets Selection -->
+    <div id="modal-presets" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2>Select a Preset Template</h2>
+          <button class="modal-close"><i data-lucide="x"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="presets-grid">
+            <div class="preset-card" data-preset="empty-scratch">
+              <div class="preset-preview empty-preview" style="background-color: var(--bg-primary); border: 2px dashed var(--border-color);">
+                <i data-lucide="plus" style="width:36px; height:36px; color: var(--text-muted);"></i>
+              </div>
+              <div class="preset-info">
+                <h3>Start From Scratch</h3>
+                <p>An empty template canvas. Design your direct email template from scratch by dragging in sections and items.</p>
+              </div>
+            </div>
+            <div class="preset-card" data-preset="alfursan-gold-en">
+              <div class="preset-preview gold-preview">
+                <div class="preview-banner"></div>
+                <div class="preview-heading"></div>
+                <div class="preview-text"></div>
+              </div>
+              <div class="preset-info">
+                <h3>Al Fursan Gold (English)</h3>
+                <p>Standard transactional / marketing email with top membership number bar, dynamic name, terms & conditions block, and golden theme footer links in LTR format.</p>
+              </div>
+            </div>
+            <div class="preset-card" data-preset="alfursan-gold-ar">
+              <div class="preset-preview gold-preview" style="direction: rtl;">
+                <div class="preview-banner" style="background-color: var(--gold);"></div>
+                <div class="preview-heading"></div>
+                <div class="preview-text"></div>
+              </div>
+              <div class="preset-info">
+                <h3>Al Fursan Gold (Arabic)</h3>
+                <p>Arabic translated campaign template with membership block, banner, body texts, and legal footer links formatted in RTL (Right-to-Left).</p>
+              </div>
+            </div>
+            <div class="preset-card" data-preset="alfursan-gold-ur">
+              <div class="preset-preview gold-preview" style="direction: rtl;">
+                <div class="preview-banner" style="background-color: var(--gold);"></div>
+                <div class="preview-heading"></div>
+                <div class="preview-text"></div>
+              </div>
+              <div class="preset-info">
+                <h3>Al Fursan Gold (Urdu)</h3>
+                <p>Urdu translated email template featuring membership details, banner, main messages, and footer links formatted in RTL (Right-to-Left).</p>
+              </div>
+            </div>
+            <div class="preset-card" data-preset="basic-newsletter">
+              <div class="preset-preview newsletter-preview">
+                <div class="preview-header-bar"></div>
+                <div class="preview-image"></div>
+                <div class="preview-heading"></div>
+                <div class="preview-text"></div>
+              </div>
+              <div class="preset-info">
+                <h3>Standard Newsletter</h3>
+                <p>A clean 1-column layout with header logo, hero image, body text block, CTA button, and social media footer links.</p>
+              </div>
+            </div>
+            <div class="preset-card" data-preset="product-promo">
+              <div class="preset-preview grid-preview">
+                <div class="preview-header-bar"></div>
+                <div class="preview-image-large"></div>
+                <div class="preview-grid-cols">
+                  <div class="col-pre"></div>
+                  <div class="col-pre"></div>
+                </div>
+              </div>
+              <div class="preset-info">
+                <h3>2-Column Product Showcase</h3>
+                <p>Ideal for highlighting features or products side-by-side. Includes hero area, 2-column feature blocks with images, description, buttons, and detailed footer.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: HTML Code Exporter -->
+    <div id="modal-export" class="modal-overlay hidden">
+      <div class="modal-card export-card">
+        <div class="modal-header">
+          <h2>Generated HTML Code</h2>
+          <button class="modal-close"><i data-lucide="x"></i></button>
+        </div>
+        <div class="modal-body export-body">
+          <p class="export-note">
+            <i data-lucide="info"></i>
+            This code contains inline CSS style tags and table-based column structures, ensuring cross-client email compatibility (Outlook, Gmail, Yahoo, Apple Mail).
+          </p>
+          <div class="code-container">
+            <textarea id="code-output" readonly></textarea>
+          </div>
+          <div class="export-actions">
+            <button id="btn-copy-code" class="btn btn-secondary">
+              <i data-lucide="copy"></i>
+              <span>Copy Code</span>
+            </button>
+            <button id="btn-download-html" class="btn btn-primary">
+              <i data-lucide="download"></i>
+              <span>Download HTML File</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+  <!-- Scripts -->
+  <script src="importer.js"></script>
+  <script src="qa-studio.js"></script>
+  <script src="validator.js"></script>
+  <script src="presets.js"></script>
+  <script src="compiler.js"></script>
+  <script src="state.js"></script>
+  <script src="renderer.js"></script>
+  <script src="inspector.js"></script>
+  <script src="dnd.js"></script>
+  <script src="ui.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Initialize Lucide icons on page load
+    lucide.createIcons();
+  </script>
+</body>
+</html>
